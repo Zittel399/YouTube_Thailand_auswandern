@@ -37,6 +37,8 @@ import fal_client  # noqa: E402  (nach dem FAL_KEY-Check importieren)
 import numpy as np  # noqa: E402
 import requests  # noqa: E402
 
+from runlog import log_run  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 CLIP = sys.argv[1] if len(sys.argv) > 1 else "test_15s"
 SOURCE_PATH = ROOT / "input" / "test_clips" / f"{CLIP}.mp4"
@@ -234,6 +236,7 @@ def main():
     out_paths = []
     for name, points in TARGETS.items():
         print(f"\nStarte SAM2-Segmentierung für '{name}' (fal-ai/sam2/video) ...")
+        call_started = time.monotonic()
         result = fal_client.subscribe(
             "fal-ai/sam2/video",
             arguments={
@@ -253,7 +256,8 @@ def main():
         )
 
         result_json_path = OUTPUT_DIR / f"{CLIP}_result_{name}.json"
-        result_json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False))
+        result_json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False),
+                                    encoding="utf-8")
         print(f"Roh-Ergebnis gespeichert: {result_json_path}")
 
         out_video_url = result["video"]["url"]
@@ -264,6 +268,14 @@ def main():
         out_path.write_bytes(r.content)
         print(f"Gespeichert: {out_path}")
         out_paths.append(out_path)
+        log_run(
+            agent="01_isolate", model="fal-ai/sam2/video", clip=CLIP, target=name,
+            duration_s=time.monotonic() - call_started,
+            cost_basis="nach GPU-Rechenzeit, Preis von fal.ai nicht veröffentlicht",
+            details={"fps": TARGET_FPS, "prompt_points": len(points),
+                     "prompt_frames": sorted({f for f, _, _ in points})},
+            outputs=[out_path],
+        )
 
     write_overlay()
     print(f"\n--- Fertig nach {time.monotonic() - started:.0f} s ---")
