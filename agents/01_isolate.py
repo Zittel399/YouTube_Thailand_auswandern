@@ -12,7 +12,8 @@ Setup (einmalig):
     # .env im Projekt-Root mit FAL_KEY=... anlegen (siehe .env.example)
 
 Ausführen:
-    python agents/01_isolate.py
+    python agents/01_isolate.py                 # Default: test_15s
+    python agents/01_isolate.py test_8s         # anderer Clip aus input/test_clips/
 """
 
 import json
@@ -37,20 +38,21 @@ import numpy as np  # noqa: E402
 import requests  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE_PATH = ROOT / "input" / "test_clips" / "test_15s.mp4"
+CLIP = sys.argv[1] if len(sys.argv) > 1 else "test_15s"
+SOURCE_PATH = ROOT / "input" / "test_clips" / f"{CLIP}.mp4"
 OUTPUT_DIR = ROOT / "intermediate" / "isolation"
-PREVIEW_PATH = OUTPUT_DIR / "frame0_preview.png"
+PREVIEW_PATH = OUTPUT_DIR / f"{CLIP}_frame0_preview.png"
 
-# Testclip ist 120 fps -> SAM2 würde 1800 Frames tracken (fal.ai rechnet
+# Handyclips sind oft 120 fps oder haben variable Bildrate -> SAM2 würde 1800 Frames tracken (fal.ai rechnet
 # nach Rechenzeit ab). Daher vorher lokal auf TARGET_FPS reduzieren und
 # diese Kopie an SAM2 schicken. Das Original in input/ bleibt unverändert.
 TARGET_FPS = 30
-VIDEO_PATH = OUTPUT_DIR / f"test_15s_{TARGET_FPS}fps.mp4"
+VIDEO_PATH = OUTPUT_DIR / f"{CLIP}_{TARGET_FPS}fps.mp4"
 
 # ---------------------------------------------------------------------
 # Foreground-Punkte für SAM2: sagen dem Modell, WELCHE Person es tracken
 # soll. Je Punkt (frame, x, y): Frame-Index im 30-fps-Video, (x, y) in
-# Pixeln, Ursprung oben links. Video ist 368x480 (Hochformat).
+# Pixeln, Ursprung oben links. Punkte gelten je Clip (TARGETS_BY_CLIP).
 # fal-ai/sam2/video kennt keine Objekt-IDs (alle Punkte eines Calls
 # ergeben EINE Maske) -> pro Person ein eigener Call, eigene Maske.
 # Je Person zwei Punkte (Kopf + Oberkörper), damit SAM2 die ganze
@@ -60,22 +62,37 @@ VIDEO_PATH = OUTPUT_DIR / f"test_15s_{TARGET_FPS}fps.mp4"
 # -> PRÜFE prompts_preview_marked.png (wird unten erzeugt) und passe die
 #    Werte bei Bedarf an, bevor du den fal.ai-Call startest!
 # ---------------------------------------------------------------------
-TARGETS = {
-    "kaia": [  # Kind im Kinderstuhl rechts
-        (0, 300, 330), (0, 295, 370),
-        (45, 215, 305), (45, 225, 345),
-        (90, 264, 310), (90, 265, 360),
-        (330, 224, 310), (330, 230, 355),
-    ],
-    "luan": [  # stehendes Kind Mitte, vor der Säule
-        (0, 188, 255), (0, 185, 310),
-        (15, 280, 265), (15, 280, 305),
-        (105, 165, 250),  # nur Kopf, darunter verdeckt der Plüsch-Dino
-    ],
+TARGETS_BY_CLIP = {
+    "test_15s": {  # 368x480, Frühstück am Pool, Kamera schwenkt viel
+        "kaia": [  # Kind im Kinderstuhl rechts
+            (0, 300, 330), (0, 295, 370),
+            (45, 215, 305), (45, 225, 345),
+            (90, 264, 310), (90, 265, 360),
+            (330, 224, 310), (330, 230, 355),
+        ],
+        "luan": [  # stehendes Kind Mitte, vor der Säule
+            (0, 188, 255), (0, 185, 310),
+            (15, 280, 265), (15, 280, 305),
+            (105, 165, 250),  # nur Kopf, darunter verdeckt der Plüsch-Dino
+        ],
+    },
+    "test_8s": {  # 368x496, Wohnzimmer mit Skateboard, ruhige Kamera
+        "kaia": [  # kleines Kind im hellen Outfit auf dem Skateboard
+            (0, 178, 215), (0, 175, 240),
+        ],
+        "luan": [  # stehendes Kind in blau-grüner Jacke, links
+            (0, 92, 70), (0, 78, 160),
+        ],
+    },
 }
+if CLIP not in TARGETS_BY_CLIP:
+    print(f"FEHLER: Für Clip '{CLIP}' sind keine Prompt-Punkte hinterlegt "
+          f"(TARGETS_BY_CLIP).")
+    sys.exit(1)
+TARGETS = TARGETS_BY_CLIP[CLIP]
 PROMPT_LABEL = 1  # 1 = Vordergrund (das willst du maskieren), 0 = Hintergrund
-MARKED_PREVIEW_PATH = OUTPUT_DIR / "prompts_preview_marked.png"
-OVERLAY_PATH = OUTPUT_DIR / "test_15s_overlay.mp4"
+MARKED_PREVIEW_PATH = OUTPUT_DIR / f"{CLIP}_prompts_preview_marked.png"
+OVERLAY_PATH = OUTPUT_DIR / f"{CLIP}_overlay.mp4"
 COLORS = {"kaia": (0, 255, 0), "luan": (255, 160, 0)}  # BGR
 
 
@@ -149,7 +166,7 @@ def extract_preview_frame():
 def write_overlay():
     """Alle Masken halbtransparent über das Video legen (mit Originalton)."""
     cap = cv2.VideoCapture(str(VIDEO_PATH))
-    mask_caps = {name: cv2.VideoCapture(str(OUTPUT_DIR / f"test_15s_masked_{name}.mp4"))
+    mask_caps = {name: cv2.VideoCapture(str(OUTPUT_DIR / f"{CLIP}_masked_{name}.mp4"))
                  for name in TARGETS}
     fps = cap.get(cv2.CAP_PROP_FPS)
     w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -235,12 +252,12 @@ def main():
             on_queue_update=on_queue_update,
         )
 
-        result_json_path = OUTPUT_DIR / f"result_{name}.json"
+        result_json_path = OUTPUT_DIR / f"{CLIP}_result_{name}.json"
         result_json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False))
         print(f"Roh-Ergebnis gespeichert: {result_json_path}")
 
         out_video_url = result["video"]["url"]
-        out_path = OUTPUT_DIR / f"test_15s_masked_{name}.mp4"
+        out_path = OUTPUT_DIR / f"{CLIP}_masked_{name}.mp4"
         print(f"Lade maskiertes Video herunter von {out_video_url} ...")
         r = requests.get(out_video_url, timeout=120)
         r.raise_for_status()
@@ -253,7 +270,7 @@ def main():
     for out_path in out_paths:
         print(f"  {out_path}")
     print(f"  {OVERLAY_PATH}  (Masken farbig über dem Original, zum Anschauen)")
-    print("Passt jede Maske über die gesamten 15 Sekunden auf die jeweilige")
+    print("Passt jede Maske über den gesamten Clip auf die jeweilige")
     print("Person? Falls nicht: TARGETS anpassen (mehr Punkte, ggf. Label 0")
     print("für Hintergrund), dann neu starten.")
     print("\nKosten: fal.ai rechnet nach Rechenzeit ab — Stand prüfst du im")
