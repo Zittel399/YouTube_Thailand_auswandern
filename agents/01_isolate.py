@@ -41,7 +41,12 @@ from runlog import log_run  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CLIP = sys.argv[1] if len(sys.argv) > 1 else "test_15s"
-SOURCE_PATH = ROOT / "input" / "test_clips" / f"{CLIP}.mp4"
+# Clips, die nicht aus input/test_clips/ kommen (z.B. Ergebnisse späterer
+# Agenten, deren Personen ebenfalls maskiert werden sollen)
+SOURCES = {
+    "test_8s_kling": ROOT / "intermediate" / "kling" / "test_8s_kling_edit.mp4",
+}
+SOURCE_PATH = SOURCES.get(CLIP, ROOT / "input" / "test_clips" / f"{CLIP}.mp4")
 OUTPUT_DIR = ROOT / "intermediate" / "isolation"
 PREVIEW_PATH = OUTPUT_DIR / f"{CLIP}_frame0_preview.png"
 
@@ -76,6 +81,14 @@ TARGETS_BY_CLIP = {
             (0, 188, 255), (0, 185, 310),
             (15, 280, 265), (15, 280, 305),
             (105, 165, 250),  # nur Kopf, darunter verdeckt der Plüsch-Dino
+        ],
+    },
+    "test_8s_kling": {  # 1240x1668, Kling-Anime-Version von test_8s
+        "kaia": [  # Anime-Kaia auf dem Skateboard
+            (0, 630, 690), (0, 600, 800),
+        ],
+        "luan": [  # Anime-Luan stehend, grüner Pulli
+            (0, 300, 200), (0, 290, 560),
         ],
     },
     "test_8s": {  # 368x496, Wohnzimmer mit Skateboard, ruhige Kamera
