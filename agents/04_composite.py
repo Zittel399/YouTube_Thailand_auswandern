@@ -18,8 +18,10 @@ Kinder. Im Bereich der echten Kinder kommt der Hintergrund deshalb aus der
 "leeren Bühne" von Agent 2 -- dort ist vom echten Kind nichts mehr übrig.
 Überall sonst bleibt das echte Video (schärfer, original). Gibt es keine
 leere Bühne, wird lokal per OpenCV aufgefüllt (sichtbare Schleier).
-Sehr dunkle Pixel (das schwarze Skateboard) kommen immer aus dem echten
-Video, weil ProPainter sie unter den Kindern nur verschmiert rekonstruiert.
+Gegenstände, mit denen die Kinder spielen (KEEP_OBJECTS, z.B. das
+Skateboard), kommen immer aus dem echten Video -- pixelgenau über ihre
+eigene SAM2-Maske (<clip>_masked_<objekt>.mp4), sonst grob über sehr dunkle
+Pixel in Kaias Maske.
 
 Ausgabe: output/<clip>_parallelwelten.mp4 und ein Vergleichsbild.
 Läuft komplett lokal, keine API-Kosten.
@@ -49,7 +51,8 @@ ANIME_FEATHER_PX = 3  # weicher Rand der Anime-Figuren
 KEEP_DARK_BELOW = 55  # Helligkeit (0-255): so dunkle Pixel nicht auffüllen
 # Nur bei diesen Figuren dunkle Pixel stehen lassen (Kaia sitzt auf dem
 # schwarzen Skateboard). Bei Luan wäre das seine dunkle Jacke -> auffüllen.
-KEEP_DARK_FIGURES = {"kaia"}
+KEEP_DARK_FIGURES = {"kaia"}  # Fallback, wenn es keine Objektmaske gibt
+KEEP_OBJECTS = ["skateboard"]  # eigene SAM2-Masken, falls vorhanden
 INPAINT_RADIUS = 6  # nur ohne leere Bühne (Fallback)
 BLEND_PX = 4  # weicher Übergang zwischen echtem Video und leerer Bühne
 
@@ -85,6 +88,10 @@ def main():
         sys.exit(1)
     clip = sys.argv[1]
     caps = open_videos(clip)
+    keep_paths = [ISOLATION_DIR / f"{clip}_masked_{o}.mp4" for o in KEEP_OBJECTS]
+    keep_caps = [cv2.VideoCapture(str(p)) for p in keep_paths if p.exists()]
+    print("Gegenstände aus echtem Video: " + (", ".join(p.stem for p in keep_paths if p.exists())
+                                              or "dunkle Pixel (keine Objektmaske gefunden)"))
     plate_path = CLEANPLATE_DIR / f"{clip}_clean.mp4"
     plate_cap = cv2.VideoCapture(str(plate_path)) if plate_path.exists() else None
     print(f"Hintergrund: {'leere Bühne ' + plate_path.name if plate_cap else 'OpenCV-Auffüllen (keine leere Bühne gefunden)'}")
@@ -125,8 +132,10 @@ def main():
             real_f = read_mask(caps[f"real_{f}"], size)
             real_kids |= real_f
             anime_kids |= read_mask(caps[f"anime_{f}"], size)
-            if f in KEEP_DARK_FIGURES:
+            if f in KEEP_DARK_FIGURES and not keep_caps:
                 keep_dark |= real_f & (gray < KEEP_DARK_BELOW)
+        for kc in keep_caps:
+            keep_dark |= read_mask(kc, size)
 
         # Wo das echte Kind sichtbar bliebe -> Hintergrund ersetzen,
         # aber dunkle echte Gegenstände (Skateboard) stehen lassen
@@ -157,6 +166,8 @@ def main():
         c.release()
     if plate_cap is not None:
         plate_cap.release()
+    for kc in keep_caps:
+        kc.release()
 
     # H.264 + Originalton (Kling-Version ist etwas kürzer -> -shortest)
     subprocess.run(

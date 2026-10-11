@@ -14,6 +14,7 @@ Setup (einmalig):
 Ausführen:
     python agents/01_isolate.py                 # Default: test_15s
     python agents/01_isolate.py test_8s         # anderer Clip aus input/test_clips/
+    python agents/01_isolate.py test_8s skateboard   # nur bestimmte Objekte
 """
 
 import json
@@ -98,6 +99,16 @@ TARGETS_BY_CLIP = {
         "luan": [  # stehendes Kind in blau-grüner Jacke, links
             (0, 92, 70), (0, 78, 160),
         ],
+        # Gegenstand, mit dem die Kinder spielen: eigene Maske, damit Agent 4
+        # ihn pixelgenau aus dem echten Video einsetzen kann. Punkte = Mitte
+        # der dunklen Brettfläche (Distanztransformation).
+        # Label 0 = Ausschlusspunkte auf Kaia, sonst nimmt SAM2 sie mit.
+        "skateboard": [
+            (0, 177, 262), (140, 222, 318), (280, 308, 398),
+            (0, 178, 215, 0), (0, 175, 240, 0),
+            (140, 194, 230, 0), (140, 207, 265, 0),
+            (280, 274, 300, 0), (280, 224, 340, 0),
+        ],
     },
 }
 if CLIP not in TARGETS_BY_CLIP:
@@ -105,10 +116,20 @@ if CLIP not in TARGETS_BY_CLIP:
           f"(TARGETS_BY_CLIP).")
     sys.exit(1)
 TARGETS = TARGETS_BY_CLIP[CLIP]
-PROMPT_LABEL = 1  # 1 = Vordergrund (das willst du maskieren), 0 = Hintergrund
+ONLY = sys.argv[2:]  # optional: nur diese Objekte maskieren
+if ONLY:
+    unknown = [t for t in ONLY if t not in TARGETS]
+    if unknown:
+        print(f"FEHLER: Unbekannte Objekte {unknown}. Möglich: {', '.join(TARGETS)}")
+        sys.exit(1)
+    TARGETS = {t: TARGETS[t] for t in ONLY}
+PROMPT_LABEL = 1  # Default: 1 = Vordergrund (maskieren), 0 = ausschließen
+# Punkte als (frame, x, y) oder (frame, x, y, label) -> immer 4-Tupel
+TARGETS = {name: [(*pt, PROMPT_LABEL) if len(pt) == 3 else tuple(pt) for pt in pts]
+           for name, pts in TARGETS.items()}
 MARKED_PREVIEW_PATH = OUTPUT_DIR / f"{CLIP}_prompts_preview_marked.png"
 OVERLAY_PATH = OUTPUT_DIR / f"{CLIP}_overlay.mp4"
-COLORS = {"kaia": (0, 255, 0), "luan": (255, 160, 0)}  # BGR
+COLORS = {"kaia": (0, 255, 0), "luan": (255, 160, 0), "skateboard": (255, 0, 255)}  # BGR
 
 
 def reduce_framerate():
@@ -143,7 +164,7 @@ def extract_preview_frame():
     print(f"Vorschau-Frame gespeichert: {PREVIEW_PATH}")
 
     # Alle Frames mit Prompt-Punkten nebeneinander, Punkte eingezeichnet
-    prompt_frames = sorted({f for pts in TARGETS.values() for f, _, _ in pts})
+    prompt_frames = sorted({f for pts in TARGETS.values() for f, _, _, _ in pts})
     cap = cv2.VideoCapture(str(VIDEO_PATH))
     tiles = []
     for frame_idx in prompt_frames:
@@ -154,11 +175,17 @@ def extract_preview_frame():
             sys.exit(1)
         for name, points in TARGETS.items():
             color = COLORS.get(name, (0, 200, 255))
-            pts = [(x, y) for f, x, y in points if f == frame_idx]
-            for x, y in pts:
+            pts = [(x, y, lab) for f, x, y, lab in points if f == frame_idx]
+            for x, y, lab in pts:
+                if lab == 0:  # Ausschlusspunkt: Kreuz
+                    for d in ((-6, -6, 6, 6), (-6, 6, 6, -6)):
+                        cv2.line(img, (x + d[0], y + d[1]), (x + d[2], y + d[3]), (0, 0, 0), 4)
+                        cv2.line(img, (x + d[0], y + d[1]), (x + d[2], y + d[3]), color, 2)
+                    continue
                 cv2.circle(img, (x, y), 8, (0, 0, 0), 3)
                 cv2.circle(img, (x, y), 8, color, 2)
                 cv2.circle(img, (x, y), 2, (0, 0, 255), -1)
+            pts = [(x, y) for x, y, lab in pts if lab == 1]
             if pts:
                 x, y = pts[0]
                 cv2.putText(img, name, (x + 11, y + 4),
@@ -181,8 +208,11 @@ def extract_preview_frame():
 def write_overlay():
     """Alle Masken halbtransparent über das Video legen (mit Originalton)."""
     cap = cv2.VideoCapture(str(VIDEO_PATH))
-    mask_caps = {name: cv2.VideoCapture(str(OUTPUT_DIR / f"{CLIP}_masked_{name}.mp4"))
-                 for name in TARGETS}
+    # alle vorhandenen Masken des Clips, auch aus früheren Läufen
+    mask_paths = {name: OUTPUT_DIR / f"{CLIP}_masked_{name}.mp4"
+                  for name in TARGETS_BY_CLIP[CLIP]}
+    mask_caps = {name: cv2.VideoCapture(str(p))
+                 for name, p in mask_paths.items() if p.exists()}
     fps = cap.get(cv2.CAP_PROP_FPS)
     w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -259,9 +289,9 @@ def main():
                         "x": x,
                         "y": y,
                         "frame_index": frame_idx,
-                        "label": PROMPT_LABEL,
+                        "label": label,
                     }
-                    for frame_idx, x, y in points
+                    for frame_idx, x, y, label in points
                 ],
             },
             with_logs=True,
@@ -286,7 +316,8 @@ def main():
             duration_s=time.monotonic() - call_started,
             cost_basis="nach GPU-Rechenzeit, Preis von fal.ai nicht veröffentlicht",
             details={"fps": TARGET_FPS, "prompt_points": len(points),
-                     "prompt_frames": sorted({f for f, _, _ in points})},
+                     "prompt_frames": sorted({f for f, _, _, _ in points}),
+                     "exclude_points": sum(1 for *_, lab in points if lab == 0)},
             outputs=[out_path],
         )
 

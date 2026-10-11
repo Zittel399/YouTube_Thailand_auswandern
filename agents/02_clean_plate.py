@@ -7,10 +7,11 @@ Hintergrund über mehrere Frames hinweg (Flow-basiert: was in einem Frame
 verdeckt ist, wird aus Nachbar-Frames geholt). Darauf setzt Agent 4 die
 Anime-Kinder -- so kann vom echten Kind nichts mehr durchschimmern.
 
-Maske = alle echten Kinder (SAM2, Agent 1), leicht vergrößert. Sehr
-dunkle Pixel in der Maske von KEEP_DARK_FIGURES (das schwarze
-Skateboard unter Kaia) werden NICHT entfernt, damit echte Gegenstände
-erhalten bleiben.
+Maske = alle echten Kinder (SAM2, Agent 1), leicht vergrößert. Gegenstände,
+mit denen die Kinder spielen (KEEP_OBJECTS, z.B. das Skateboard), werden
+NICHT entfernt: Gibt es dafür eine eigene SAM2-Maske, wird genau sie
+ausgespart; sonst grob alle sehr dunklen Pixel in der Maske von
+KEEP_DARK_FIGURES.
 
 Läuft lokal (Replicate ist aus der Cloud-Sandbox nicht erreichbar).
 
@@ -53,7 +54,8 @@ COST_HINT = "Replicate rechnet nach GPU-Zeit; laut Modellseite ca. 0,025 $ pro L
 FIGURES = ["kaia", "luan"]
 MASK_GROW_PX = 6  # zusätzlich zu ProPainters eigener mask_dilation
 KEEP_DARK_BELOW = 55  # Helligkeit (0-255)
-KEEP_DARK_FIGURES = {"kaia"}  # Kaia sitzt auf dem schwarzen Skateboard
+KEEP_DARK_FIGURES = {"kaia"}  # Fallback: Kaia sitzt auf dem schwarzen Skateboard
+KEEP_OBJECTS = ["skateboard"]  # eigene SAM2-Masken, falls vorhanden
 
 
 def make_mask_video(clip, mask_path):
@@ -61,6 +63,10 @@ def make_mask_video(clip, mask_path):
     video = cv2.VideoCapture(str(ISOLATION_DIR / f"{clip}_30fps.mp4"))
     caps = {f: cv2.VideoCapture(str(ISOLATION_DIR / f"{clip}_masked_{f}.mp4"))
             for f in FIGURES}
+    keep_paths = [ISOLATION_DIR / f"{clip}_masked_{o}.mp4" for o in KEEP_OBJECTS]
+    keep_caps = [cv2.VideoCapture(str(p)) for p in keep_paths if p.exists()]
+    print("Gegenstände behalten: " + (", ".join(p.stem for p in keep_paths if p.exists())
+                                      or "dunkle Pixel (keine Objektmaske gefunden)"))
     fps = video.get(cv2.CAP_PROP_FPS)
     w = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
     h = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -83,15 +89,19 @@ def make_mask_video(clip, mask_path):
                 continue
             m = cv2.cvtColor(m, cv2.COLOR_BGR2GRAY) > 127
             remove |= m
-            if f in KEEP_DARK_FIGURES:
+            if f in KEEP_DARK_FIGURES and not keep_caps:
                 keep |= m & (gray < KEEP_DARK_BELOW)
+        for kc in keep_caps:
+            ok_k, km = kc.read()
+            if ok_k:
+                keep |= cv2.cvtColor(km, cv2.COLOR_BGR2GRAY) > 127
         remove = (cv2.dilate(remove.astype(np.uint8), grow) > 0) & ~keep
         share.append(remove.mean())
         writer.write(cv2.cvtColor(remove.astype(np.uint8) * 255, cv2.COLOR_GRAY2BGR))
         frames += 1
     writer.release()
     video.release()
-    for c in caps.values():
+    for c in list(caps.values()) + keep_caps:
         c.release()
 
     # verlustarm, damit die Maske binär bleibt
