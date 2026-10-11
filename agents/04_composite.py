@@ -10,12 +10,16 @@ Eingaben (alle aus intermediate/isolation/, erzeugt von Agent 1):
   <clip>_kling_30fps.mp4         Kling-Anime-Version (gleiche Bewegung)
   <clip>_kling_masked_<figur>.mp4  Masken der ANIME-Kinder
 
+Optional (empfohlen): intermediate/cleanplate/<clip>_clean.mp4 von
+Agent 2 = echtes Video ohne Kinder (ProPainter).
+
 Die Anime-Figuren haben nicht exakt dieselbe Silhouette wie die echten
-Kinder. Wo ein echtes Kind hinter der Anime-Figur hervorschauen würde,
-wird der Hintergrund aufgefüllt (OpenCV-Inpainting, lokal, kostenlos).
-Sehr dunkle Pixel (z.B. das schwarze Skateboard) werden dabei nicht
-aufgefüllt, damit echte Gegenstände, die in der Kindermaske stecken,
-erhalten bleiben.
+Kinder. Im Bereich der echten Kinder kommt der Hintergrund deshalb aus der
+"leeren Bühne" von Agent 2 -- dort ist vom echten Kind nichts mehr übrig.
+Überall sonst bleibt das echte Video (schärfer, original). Gibt es keine
+leere Bühne, wird lokal per OpenCV aufgefüllt (sichtbare Schleier).
+Sehr dunkle Pixel (das schwarze Skateboard) kommen immer aus dem echten
+Video, weil ProPainter sie unter den Kindern nur verschmiert rekonstruiert.
 
 Ausgabe: output/<clip>_parallelwelten.mp4 und ein Vergleichsbild.
 Läuft komplett lokal, keine API-Kosten.
@@ -34,6 +38,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 ISOLATION_DIR = ROOT / "intermediate" / "isolation"
+CLEANPLATE_DIR = ROOT / "intermediate" / "cleanplate"
 OUTPUT_DIR = ROOT / "output"
 
 FIGURES = ["kaia", "luan"]
@@ -45,7 +50,8 @@ KEEP_DARK_BELOW = 55  # Helligkeit (0-255): so dunkle Pixel nicht auffüllen
 # Nur bei diesen Figuren dunkle Pixel stehen lassen (Kaia sitzt auf dem
 # schwarzen Skateboard). Bei Luan wäre das seine dunkle Jacke -> auffüllen.
 KEEP_DARK_FIGURES = {"kaia"}
-INPAINT_RADIUS = 6
+INPAINT_RADIUS = 6  # nur ohne leere Bühne (Fallback)
+BLEND_PX = 4  # weicher Übergang zwischen echtem Video und leerer Bühne
 
 
 def open_videos(clip):
@@ -79,6 +85,9 @@ def main():
         sys.exit(1)
     clip = sys.argv[1]
     caps = open_videos(clip)
+    plate_path = CLEANPLATE_DIR / f"{clip}_clean.mp4"
+    plate_cap = cv2.VideoCapture(str(plate_path)) if plate_path.exists() else None
+    print(f"Hintergrund: {'leere Bühne ' + plate_path.name if plate_cap else 'OpenCV-Auffüllen (keine leere Bühne gefunden)'}")
     started = time.monotonic()
 
     rw = int(caps["real"].get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -119,13 +128,22 @@ def main():
             if f in KEEP_DARK_FIGURES:
                 keep_dark |= real_f & (gray < KEEP_DARK_BELOW)
 
-        # Wo das echte Kind sichtbar bliebe -> Hintergrund auffüllen,
+        # Wo das echte Kind sichtbar bliebe -> Hintergrund ersetzen,
         # aber dunkle echte Gegenstände (Skateboard) stehen lassen
         real_grown = cv2.dilate(real_kids.astype(np.uint8), grow) > 0
-        hole = real_grown & ~anime_kids & ~keep_dark
-        hole_u8 = hole.astype(np.uint8) * 255
-        background = cv2.inpaint(real, hole_u8, INPAINT_RADIUS, cv2.INPAINT_TELEA)
-        hole_share.append(hole.mean())
+        keep_dark = cv2.morphologyEx(keep_dark.astype(np.uint8), cv2.MORPH_CLOSE,
+                                     np.ones((5, 5), np.uint8)) > 0
+        hole = real_grown & ~keep_dark
+        hole_share.append((hole & ~anime_kids).mean())
+        if plate_cap is not None:
+            ok_p, plate = plate_cap.read()
+            plate = cv2.resize(plate, size, interpolation=cv2.INTER_LANCZOS4)
+            k = 2 * BLEND_PX + 1
+            w = cv2.GaussianBlur(hole.astype(np.float32), (k, k), 0)[..., None]
+            background = (plate * w + real * (1 - w)).astype(np.uint8)
+        else:
+            hole_u8 = (hole & ~anime_kids).astype(np.uint8) * 255
+            background = cv2.inpaint(real, hole_u8, INPAINT_RADIUS, cv2.INPAINT_TELEA)
 
         alpha = cv2.GaussianBlur(anime_kids.astype(np.float32), (feather, feather), 0)[..., None]
         frame = (anime * alpha + background * (1 - alpha)).astype(np.uint8)
@@ -137,6 +155,8 @@ def main():
     writer.release()
     for c in caps.values():
         c.release()
+    if plate_cap is not None:
+        plate_cap.release()
 
     # H.264 + Originalton (Kling-Version ist etwas kürzer -> -shortest)
     subprocess.run(
@@ -164,7 +184,7 @@ def main():
     cv2.imwrite(str(compare_path), np.hstack(tiles))
 
     print(f"Fertig nach {time.monotonic() - started:.0f} s: {frames} Frames, {ow}x{oh}")
-    print(f"  aufgefüllter Anteil pro Frame: Ø {100 * np.mean(hole_share):.1f} %, "
+    print(f"  ersetzter Hintergrund (nicht von Anime verdeckt): Ø {100 * np.mean(hole_share):.1f} %, "
           f"max {100 * np.max(hole_share):.1f} %")
     print(f"  {out_path}")
     print(f"  {compare_path}")
