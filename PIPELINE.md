@@ -60,6 +60,8 @@ Pro neuem Clip im Code eintragen:
 **Agent 2 – Leere Bühne (`jd7h/propainter` auf Replicate)**
 - Maske = alle echten Kinder, um 6 px vergrößert, **ohne** die Gegenstands-Masken
 - `save_fps` = Bildrate des Clips (Standard wäre 24!), `mask_dilation` 4
+- `fp16` = true: Replicate-Instanzen laufen teils noch im fp16-Modus eines anderen Auftrags,
+  mit fp32 stürzt das Modell dann ab („FloatTensor vs HalfTensor“)
 - Video und Maske über den fal-Storage hochladen und als URL übergeben. ProPainter prüft die
   Dateiendung `.mp4`, und der Replicate-Client verliert beim eigenen Upload den Dateinamen.
 

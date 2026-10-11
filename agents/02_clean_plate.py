@@ -56,6 +56,10 @@ MASK_GROW_PX = 6  # zusätzlich zu ProPainters eigener mask_dilation
 KEEP_DARK_BELOW = 55  # Helligkeit (0-255)
 KEEP_DARK_FIGURES = {"kaia"}  # Fallback: Kaia sitzt auf dem schwarzen Skateboard
 KEEP_OBJECTS = ["skateboard"]  # eigene SAM2-Masken, falls vorhanden
+# Halbpräzision: Replicate-Instanzen laufen teils noch im fp16-Modus eines
+# vorherigen Auftrags -> mit fp32-Eingaben Absturz ("FloatTensor vs
+# HalfTensor"). fp16 passt immer, Qualitätsunterschied minimal.
+FP16 = True
 
 
 def make_mask_video(clip, mask_path):
@@ -158,6 +162,7 @@ def main():
             "mode": "video_inpainting",
             "save_fps": int(round(fps)),
             "mask_dilation": 4,
+            "fp16": FP16,
         },
     )
     prediction.wait()
@@ -177,7 +182,8 @@ def main():
         agent="02_clean_plate", model=MODEL, clip=clip, target="+".join(FIGURES),
         duration_s=time.monotonic() - started,
         cost_basis=COST_HINT,
-        details={"frames": frames, "fps": fps, "gpu_predict_time_s": predict_time,
+        details={"frames": frames, "fps": fps, "fp16": FP16,
+                 "gpu_predict_time_s": predict_time,
                  "replicate_prediction_id": prediction.id,
                  "outputs_returned": len(outputs)},
         outputs=[out_path],
