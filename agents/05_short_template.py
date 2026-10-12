@@ -138,7 +138,7 @@ def style_wort(draw, ep, t, line, word_idx):
 
 
 def style_manga(draw, ep, t, line, word_idx):
-    """V3 'Manga': Titelkarte am Anfang, danach Sprechbox unten, Kennung oben mittig."""
+    """V3 'Manga': Titelkarte am Anfang, danach Textbox unten, Kennung oben mittig."""
     if t < 1.3:  # Titelkarte "Folge N"
         a = 1.0 if t < 1.0 else max(0.0, (1.3 - t) / 0.3)
         draw.rectangle([0, 0, W, H], fill=(0, 0, 0, int(150 * a)))
@@ -164,12 +164,9 @@ def style_manga(draw, ep, t, line, word_idx):
     box_h = 70 * len(lines) + 70
     x0, x1 = 90, W - 90
     y0 = H - 250 - box_h
+    # Textbox ohne Sprechblasen-Zipfel (wie ein Chat-/Dialogfenster)
     draw.rounded_rectangle([x0, y0, x1, y0 + box_h], radius=36, fill=(255, 255, 255, 240),
                            outline=(0, 0, 0, 255), width=6)
-    # kleiner Sprechblasen-Zipfel
-    draw.polygon([(x0 + 120, y0), (x0 + 170, y0), (x0 + 110, y0 - 50)],
-                 fill=(255, 255, 255, 240), outline=(0, 0, 0, 255))
-    draw.line([(x0 + 122, y0 + 3), (x0 + 168, y0 + 3)], fill=(255, 255, 255, 240), width=8)
     y = y0 + 35
     for ln in lines:
         lw = draw.textlength(ln, font=fnt)
