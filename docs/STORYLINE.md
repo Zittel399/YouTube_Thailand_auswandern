@@ -45,6 +45,12 @@ Legende: **FEST** = entschieden · **VORSCHLAG** = von Claude empfohlen, von Chr
 
 ## 4. Opener / Signature
 
+> **Update 12.10.2026 (Chris):** Serien-Storytelling statt Begrüßungs-Opener. Jeder ~10-s-Clip ist eine
+> **Folge** einer fortlaufenden Geschichte („wer alles sehen will, schaut Folge 1 bis 1000“). Kennung im Bild:
+> **„PARALLELWELTEN · Folge N“**. Der Einstieg „Moin, Leute — wusstet ihr schon …?“ ist damit **verworfen**;
+> die genaue Hook-Formel ist **OFFEN** (siehe Vorschläge im Chat, z. B. „Folge N: [Was passiert]“ als erster Satz).
+> Story-Start: die Auswanderung beginnt mit **Ausweisen und DTV-Visum** (was man wissen muss).
+
 - **Opener (von Chris favorisiert, final noch nicht ausdrücklich abgenickt):**
   „**Moin, Leute —**“ + zweiter Beat je Säule
   - Säule A: „**Wusstet ihr schon …?**“
@@ -108,7 +114,8 @@ YouTube + Instagram. Puffer-Wächter: Telegram-Alarm bei < 4 Wochen Vorrat.
 ## Offene Entscheidungen (für Chris)
 
 1. Persona-Zeile für Bio/Trailer (Vorschlag: Daten-Auswanderer)
-2. Opener „Moin, Leute —“ final bestätigen
-3. Untertitel-Stil (Schrift, Farbe, Position, Animation)
-4. Musikrichtung und Sound-Sting
-5. Pseudonyme für die Kinder im Kanal
+2. Hook-Formel für den Folgen-Einstieg (Opener „Moin, Leute“ verworfen, s. Abschnitt 4)
+3. Untertitel-Stil: 3 Varianten gerendert (`agents/05_short_template.py`: klar / wort / manga), Auswahl offen
+4. Musikrichtung und Sound-Sting (in der Vorlage: Platzhalter-Sting, leerer Musik-Slot)
+5. ~~Pseudonyme für die Kinder~~ → 12.10.2026: Chris will die echten Vornamen (Kaia, Luan) verwenden.
+   Hinweis: widerspricht Leitplanke 8 („keine echten Namen öffentlich“) – Leitplanke bei Bestätigung anpassen.
