@@ -1,6 +1,6 @@
 # Parallelwelten – Story-Bibel
 
-Stand: 22.10.2026. Grundlage: Chris' Input vom 22.10.2026 + `docs/STORYLINE.md`.
+Stand: 22.10.2026 (2. Fassung). Grundlage: Chris' Input vom 22.10.2026 + `docs/STORYLINE.md`.
 Status: **ENTWURF** – Folgenplan ist ein Vorschlag, Reihenfolge und Texte darf Chris frei ändern.
 
 ---
@@ -27,12 +27,15 @@ Jede Folge beantwortet ein kleines Stück davon. Wer alles sehen will, schaut Fo
 | Figur | Darstellung | Hinweise |
 |---|---|---|
 | **Chris** (Erzähler) | **echt** | Stimme = ElevenLabs-Klon, erzählt jede Folge in Ich-Form |
-| **Partnerin** | **echt** | Name im Voiceover: „meine Frau“ (Name offen) |
+| **Partnerin** | **echt** | Im Voiceover immer „meine Frau“ (FEST 22.10.) |
 | **Opa** | **echt** | |
-| **Sohn** (Luan) | **Anime** | Referenz `luan_ref_1.png`. Zentrale Figur des Bildungs-Fadens |
-| **Tochter** (Kaia) | **Anime** | Referenz `kaia_ref_1.png`. Die Kleine, sorgt für die lustigen Momente |
+| **Sohn** | **Anime** | Öffentlich nur „mein Sohn“. Zentrale Figur des Bildungs-Fadens |
+| **Tochter** | **Anime** | Öffentlich nur „meine Tochter“ / „die Kleine“. Sorgt für die lustigen Momente |
 | Fremde Kinder | vorerst: nicht Hauptmotiv / unkenntlich | später ebenfalls Anime (eigener Schritt, noch nicht gebaut) |
 | Fremde Erwachsene | nicht Hauptmotiv / unkenntlich | Recht am eigenen Bild |
+
+**Keine Kindernamen öffentlich (FEST 22.10.)** – nicht in Voiceover, Captions, Titeln, Hashtags.
+Die internen Namen in `PIPELINE.md`/Code (Referenzbilder, Masken) bleiben intern.
 
 Arbeitgeber: **nie namentlich.** Formulierung: „einer der größten Autobauer der Welt“ / „der Konzern“.
 
@@ -61,6 +64,27 @@ Formate (nach Kosten, siehe `PIPELINE.md`): **R** = Real-POV (billig) · **M** =
 
 Kapitel und Meilensteine aus Chris' Input: **Reisepässe → Visum → Steuer → Finanzen → Aufhebungsvertrag**.
 
+### Echte Zeitachse (FEST 22.10.2026)
+
+| Meilenstein | Datum |
+|---|---|
+| Reisepässe | **erledigt** (kürzlich erneuert) |
+| Visum | **17.01.2027** |
+| Abflug | **zwischen 15.02. und 15.03.2027** |
+
+**Regel: Die Serie überholt nie die Wirklichkeit.** Bei einer Folge alle 2 Tage ab ca. 01.11.2026 sind
+die 28 Folgen am ~25.12. aufgebraucht – Visum und Abflug kommen aber erst danach. Deshalb:
+
+| Zeitraum | Folgen | Inhalt |
+|---|---|---|
+| Nov – Mitte Jan | 1–10, 12–24 | Entscheidung, Pässe (Rückblick), Steuer/Geld, Job, Ausmisten |
+| Lücken füllen | Zwischenfolgen | Säule A/B-Folgen ohne Zeitbezug („Deutschland vs. Thailand: …“), Bildung |
+| ab 17.01.2027 | 11 | Visum ist da |
+| Feb – März 2027 | 25–28 | Abschied, Abflug, Staffelfinale |
+
+Bis zum Abflug braucht Staffel 1 damit eher **50–60 Folgen**. Die Zwischenfolgen schlägt der
+Tages-Agent aus dem hochgeladenen Material vor (siehe `docs/AUTOMATION.md`).
+
 ### Kapitel 1 – Die Entscheidung (Folge 1–5)
 
 | # | Titel | Bild | Voiceover (Entwurf) | Fmt |
@@ -75,12 +99,14 @@ Kapitel und Meilensteine aus Chris' Input: **Reisepässe → Visum → Steuer �
 
 | # | Titel | Bild | Voiceover (Entwurf) | Fmt |
 |---|---|---|---|---|
-| 6 | Reisepässe | Real: Bürgeramt, Wartenummer | „Erste Prüfung: Reisepässe für vier. Ich dachte, ein Termin. Realität: Nummer 247.“ | R |
-| 7 | Passfotos mit Kleinkind | Anime: Tochter zappelt vor Kamera | „Biometrisches Passfoto mit einer Dreijährigen. Versuch eins bis neun: lassen wir das.“ | M |
+| 6 | Reisepässe | Real: Bürgeramt, Wartenummer | „Erste Prüfung: Reisepässe für vier. Ich dachte, ein Termin. Realität: Nummer 247. Aber: erledigt.“ | R |
+| 7 | Passfotos mit Kleinkind | Anime: Tochter zappelt vor Kamera | „Biometrisches Passfoto mit meiner Tochter. Versuch eins bis neun: lassen wir das.“ | M |
 | 8 | Welches Visum? | Real: Laptop, Tabs | „Touristenvisum? Rentnervisum? Für uns passt das DTV. Was das ist – in 10 Sekunden. Nächste Folge.“ | R |
 | 9 | DTV erklärt (B) | Text-Karten | „DTV: Destination Thailand Visa. Bis zu fünf Jahre, Familie kann mit. Was du dafür brauchst …“ | R |
 | 10 | Die Unterlagen | Real: Papierstapel | „Kontoauszüge, Nachweise, Übersetzungen. Mein Schreibtisch sieht aus wie ein Finanzamt. Apropos Finanzamt …“ | R |
-| 11 | Antrag abgeschickt | Anime: Kinder werfen Brief in Briefkasten | „Antrag ist raus. Jetzt heißt es warten. Und während wir warten, kommt die größte Frage überhaupt: die Steuer.“ | A |
+
+*(Folge 11 verschoben – siehe Zeitachse. Nach Folge 10 geht es direkt mit Kapitel 3 weiter.)*
+| 11 | Das Visum ist da *(erst ab 17.01.2027)* | Anime: Kinder halten Pässe hoch | „17. Januar. Das Visum ist da. Jetzt gibt es kein Zurück mehr. Nächster Schritt: Flug buchen.“ | A |
 
 ### Kapitel 3 – Steuer & Geld (Folge 12–17)
 
@@ -118,7 +144,7 @@ Rahmen: **eigene Erfahrung/Recherche, keine Beratung** (Leitplanke).
 |---|---|---|---|---|
 | 25 | Opa | Real: Opa (echt), Kinder Anime daneben | „Opa. Der Abschied, vor dem ich am meisten Angst hatte. Aber er hat einen Plan …“ | A |
 | 26 | Die letzte Bratwurst | Real: Imbiss, Winter | „Letzte Bratwurst, letzter Winter. Ich werde das hier vermissen. Ein bisschen.“ | R |
-| 27 | Flughafen | Real: Abflugtafel | „Vier Pässe, vier Visa, acht Koffer. Gate B12. Es ist wirklich passiert.“ | R |
+| 27 | Flughafen | Real: Abflugtafel | „Vier Pässe, vier Visa, acht Koffer. Es ist wirklich passiert.“ | R |
 | 28 | Staffelfinale | Anime: Kinder am Flugzeugfenster, Wolken | „Unter uns wird Deutschland kleiner. Mein Sohn fragt: Papa, wie ist die neue Schule? Staffel 2: Ankommen.“ | A |
 
 **Kostenschätzung Staffel 1:** 6 × A (≈ 10 $) + Rest R/M (Cent-Beträge + Stimme) → **ca. 12–15 $**.
@@ -136,7 +162,7 @@ Vorauswahl sie direkt einer Folge zuordnen.
 
 ## 8. Offen
 
-1. Name der Partnerin im Voiceover oder nur „meine Frau“?
-2. Kindernamen öffentlich (Kaia, Luan) – Leitplanke 8 anpassen? (siehe `STORYLINE.md`)
-3. Echte Daten der Meilensteine (Pass, Visum, Aufhebungsvertrag, Abflug) für die Reihenfolge
+1. ~~Name der Partnerin~~ → „meine Frau“
+2. ~~Kindernamen öffentlich~~ → nein, „mein Sohn“ / „meine Tochter“
+3. Datum des Aufhebungsvertrags / letzter Arbeitstag (für Folge 18–20)
 4. Hook-Formel: Vorschlag = erster Satz „Folge N.“ + Kernsatz (wie oben)

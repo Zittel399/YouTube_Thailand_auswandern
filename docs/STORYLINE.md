@@ -125,5 +125,5 @@ YouTube + Instagram. Puffer-Wächter: Telegram-Alarm bei < 4 Wochen Vorrat.
 2. Hook-Formel für den Folgen-Einstieg (Opener „Moin, Leute“ verworfen, s. Abschnitt 4)
 3. ~~Untertitel-Stil~~ → 22.10.2026: Manga-Stil
 4. Musikrichtung und Sound-Sting (in der Vorlage: Platzhalter-Sting, leerer Musik-Slot)
-5. ~~Pseudonyme für die Kinder~~ → 12.10.2026: Chris will die echten Vornamen (Kaia, Luan) verwenden.
-   Hinweis: widerspricht Leitplanke 8 („keine echten Namen öffentlich“) – Leitplanke bei Bestätigung anpassen.
+5. ~~Kindernamen~~ → 22.10.2026: **keine Namen öffentlich**, nur „mein Sohn“ / „meine Tochter“;
+   Partnerin = „meine Frau“. Leitplanke 8 bleibt.
