@@ -1,6 +1,6 @@
 # Parallelwelten – Storyline & Format-Festlegungen
 
-Stand: 12.10.2026. Zusammengefasst aus den Chats „AI-Video-Kanal mit N8N automatisieren“
+Stand: 22.10.2026 (Folgenplan: `docs/STORY_BIBEL.md`). Zusammengefasst aus den Chats „AI-Video-Kanal mit N8N automatisieren“
 (17.–21.09.2026) und „Smartglasses mit Sehstärke für Thailand“ (bis 12.10.2026).
 Die dort erstellten Dateien (`format-guide.md`, `ideas.md`, `anime-hybrid.md`, `style-bible.md`)
 wurden nie in dieses Repo committet; diese Datei ersetzt sie als Referenz.
@@ -60,7 +60,12 @@ Legende: **FEST** = entschieden · **VORSCHLAG** = von Claude empfohlen, von Chr
 - **VORSCHLAG Persona (Bio/Trailer):** „Der Daten-Auswanderer“ – „Ich bin Chris, Datenanalyst – ich hab das Auswandern durchgerechnet. Hier sind die echten Zahlen.“ (Alternativen: „Der ehrliche Auswanderer“, „Tag X“). **OFFEN.**
 - **FEST – Short-Signature in jedem Clip:** immer gleicher Untertitel-Stil · immer dieselbe Stimme · immer derselbe kurze Sound-Sting · optional 1-Sekunden-Tag/Logo.
 
-## 5. Captions / Untertitel – OFFEN
+## 5. Captions / Untertitel
+
+> **Update 22.10.2026 (Chris) – FEST:** Manga-Stil (Textbox ohne Zipfel, Variante `manga` in
+> `agents/05_short_template.py`). Captions müssen immer eindeutig sein: ein Satz pro Box,
+> Text = exakt das ElevenLabs-Voiceover.
+
 
 Festgelegt ist nur: **ein einziger, gleichbleibender Untertitel-Stil** als Wiedererkennungsmerkmal.
 Schrift, Farbe, Position, Wort-für-Wort vs. Zeilen wurden nicht entschieden.
@@ -91,7 +96,10 @@ Caption-Text + Hashtags schreibt ein LLM-Call (mit Trending-Hashtag-Lookup).
 - **Kinderschutz:** echte Fotos/Videos der Kinder nie posten, nur Anime-Version.
   **Keine echten Namen öffentlich** (Pseudonyme oder keine Namen), keine Schule/Adresse.
   → Die internen Namen in `PIPELINE.md` dürfen nicht in Captions, Voiceover oder Titeln landen.
-- Arbeitgeber nie namentlich nennen („sicherer Konzernjob“).
+- Arbeitgeber nie namentlich nennen. Erlaubt: „einer der größten Autobauer der Welt“ (FEST 22.10.2026).
+  Ausstieg per Aufhebungsvertrag.
+- Darstellung (FEST 22.10.2026): Erwachsene (Chris, Partnerin, Opa) **echt**, eigene Kinder **Anime**.
+  Fremde Kinder später ebenfalls Anime, bis dahin nicht Hauptmotiv.
 - Steuer/Recht nur als eigene Erfahrung/Recherche framen, nicht als Beratung.
 - Nur eigenes Material, kein Repost fremder Videos.
 - Rohmaterial archivieren, nicht löschen.
@@ -115,7 +123,7 @@ YouTube + Instagram. Puffer-Wächter: Telegram-Alarm bei < 4 Wochen Vorrat.
 
 1. Persona-Zeile für Bio/Trailer (Vorschlag: Daten-Auswanderer)
 2. Hook-Formel für den Folgen-Einstieg (Opener „Moin, Leute“ verworfen, s. Abschnitt 4)
-3. Untertitel-Stil: 3 Varianten gerendert (`agents/05_short_template.py`: klar / wort / manga), Auswahl offen
+3. ~~Untertitel-Stil~~ → 22.10.2026: Manga-Stil
 4. Musikrichtung und Sound-Sting (in der Vorlage: Platzhalter-Sting, leerer Musik-Slot)
 5. ~~Pseudonyme für die Kinder~~ → 12.10.2026: Chris will die echten Vornamen (Kaia, Luan) verwenden.
    Hinweis: widerspricht Leitplanke 8 („keine echten Namen öffentlich“) – Leitplanke bei Bestätigung anpassen.
