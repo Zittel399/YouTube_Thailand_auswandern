@@ -62,7 +62,7 @@ Prototyp: `dashboard/index.html` (öffnet sich auch lokal per Doppelklick). Date
 
 | Option | Bewertung |
 |---|---|
-| **Hostinger** (vorhanden?) | **empfohlen**: statische Seite, GitHub Action lädt sie täglich hoch, **Passwortschutz** per `.htaccess` |
+| **Hostinger** | **gewählt (23.10.)**: statische Seite, GitHub Action lädt sie täglich hoch, **Passwortschutz** per `.htaccess` |
 | Google Workspace | Google Sites kann keine eigene Seite mit Skript einbinden; ginge nur über Apps Script – umständlicher |
 | GitHub Pages | nur sinnvoll mit privatem Repo + bezahltem Plan, sonst öffentlich |
 
@@ -78,7 +78,7 @@ Das Dashboard enthält Familien-Infos und Zahlen → **immer mit Passwort**.
 | 4 | YouTube-Kanal „Parallelwelten“ + API-Zugang (OAuth) | Upload, Statistiken |
 | 5 | Instagram als Creator-/Business-Konto | Posting, Statistiken |
 | 6 | ElevenLabs-Konto + Stimmprobe | Voiceover |
-| 7 | Hostinger-Zugang (FTP) | Dashboard hosten |
+| 7 | Hostinger-Zugang (FTP), Subdomain z. B. `studio.<deine-domain>` | Dashboard hosten |
 | 8 | Alle Schlüssel als **GitHub Secrets** (nie in Chat oder Repo) | Agent |
 
 ## 5. Laufende Kosten (Schätzung)

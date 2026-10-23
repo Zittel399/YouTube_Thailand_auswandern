@@ -1,13 +1,28 @@
 // Daten für das Dashboard. Später schreibt der Tages-Agent diese Datei täglich neu.
 // Alles unter "demo" sind BEISPIELDATEN zur Ansicht.
 window.PW_DATA = {
- "generated": "2026-10-22",
+ "generated": "2026-10-23",
  "cadenceDays": 2,
  "bufferAlarmDays": 28,
  "milestones": [
-  {"label": "Pässe erneuert", "date": "2026-10-15", "done": true},
-  {"label": "Visum", "date": "2027-01-17"},
-  {"label": "Abflug", "date": "2027-02-15", "end": "2027-03-15"}
+  {
+   "label": "Pässe erneuert",
+   "date": "2026-10-15",
+   "done": true
+  },
+  {
+   "label": "Kanal-Start",
+   "date": "2026-12-01"
+  },
+  {
+   "label": "Visum",
+   "date": "2027-01-17"
+  },
+  {
+   "label": "Abflug",
+   "date": "2027-02-15",
+   "end": "2027-03-15"
+  }
  ],
  "seasons": [
   {
@@ -31,7 +46,7 @@ window.PW_DATA = {
    "image": "grauer Wolfsburger Morgen, Kaffee",
    "voiceover": "Folge 1. Eines Abends sagte ich: Wir gehen. Nicht in den Urlaub. Für immer. Meine Frau schaute mich nur an …",
    "format": "R",
-   "date": "2026-11-01",
+   "date": "2026-12-01",
    "status": "entwurf",
    "source": null,
    "season": 1
@@ -43,7 +58,7 @@ window.PW_DATA = {
    "image": "Kinder (Anime) mit Schulranzen",
    "voiceover": "Der wichtigste Grund sitzt hier. Mein Sohn. Und eine Frage, die mich nicht mehr loslässt: Welche Schule hat er verdient?",
    "format": "M",
-   "date": "2026-11-03",
+   "date": "2026-12-03",
    "status": "idee",
    "source": null,
    "season": 1
@@ -55,7 +70,7 @@ window.PW_DATA = {
    "image": "Anime-Sohn vor Schulgebäude, Regen",
    "voiceover": "Ich will, dass er neugierig bleibt. In Thailand haben wir eine Schule gefunden, die genau das kann. Dazu später mehr.",
    "format": "M",
-   "date": "2026-11-05",
+   "date": "2026-12-05",
    "status": "idee",
    "source": null,
    "season": 1
@@ -67,7 +82,7 @@ window.PW_DATA = {
    "image": "Real: Baustelle/Bahnhof, Anzeigetafel „Verspätung“",
    "voiceover": "Grund Nummer zwei: Vieles in Deutschland fühlt sich an, als würde es langsam auseinanderfallen. Ihr kennt das.",
    "format": "R",
-   "date": "2026-11-07",
+   "date": "2026-12-07",
    "status": "idee",
    "source": null,
    "season": 1
@@ -79,7 +94,7 @@ window.PW_DATA = {
    "image": "Anime: beide Kinder auf Feldweg, Industrie-Silhouette",
    "voiceover": "Und ehrlich? Wir wollen nochmal was erleben. Als Familie. Das Unbekannte. Ziel: Krabi, Thailand. Aber erst kommt der Papierkram …",
    "format": "A",
-   "date": "2026-11-09",
+   "date": "2026-12-09",
    "status": "idee",
    "source": null,
    "season": 1
@@ -91,7 +106,7 @@ window.PW_DATA = {
    "image": "Real: Bürgeramt, Wartenummer",
    "voiceover": "Erste Prüfung: Reisepässe für vier. Ich dachte, ein Termin. Realität: Nummer 247. Aber: erledigt.",
    "format": "R",
-   "date": "2026-11-11",
+   "date": "2026-12-11",
    "status": "idee",
    "source": null,
    "season": 1
@@ -103,7 +118,7 @@ window.PW_DATA = {
    "image": "Anime: Tochter zappelt vor Kamera",
    "voiceover": "Biometrisches Passfoto mit meiner Tochter. Versuch eins bis neun: lassen wir das.",
    "format": "M",
-   "date": "2026-11-13",
+   "date": "2026-12-13",
    "status": "idee",
    "source": null,
    "season": 1
@@ -115,7 +130,7 @@ window.PW_DATA = {
    "image": "Real: Laptop, Tabs",
    "voiceover": "Touristenvisum? Rentnervisum? Für uns passt das DTV. Was das ist – in 10 Sekunden. Nächste Folge.",
    "format": "R",
-   "date": "2026-11-15",
+   "date": "2026-12-15",
    "status": "idee",
    "source": null,
    "season": 1
@@ -127,7 +142,7 @@ window.PW_DATA = {
    "image": "Text-Karten",
    "voiceover": "DTV: Destination Thailand Visa. Bis zu fünf Jahre, Familie kann mit. Was du dafür brauchst …",
    "format": "R",
-   "date": "2026-11-17",
+   "date": "2026-12-17",
    "status": "idee",
    "source": null,
    "season": 1
@@ -139,7 +154,7 @@ window.PW_DATA = {
    "image": "Real: Papierstapel",
    "voiceover": "Kontoauszüge, Nachweise, Übersetzungen. Mein Schreibtisch sieht aus wie ein Finanzamt. Apropos Finanzamt …",
    "format": "R",
-   "date": "2026-11-19",
+   "date": "2026-12-19",
    "status": "idee",
    "source": null,
    "season": 1
@@ -164,7 +179,7 @@ window.PW_DATA = {
    "image": "Real: zwei Flaggen auf dem Tisch",
    "voiceover": "Wenn du auswanderst, fragen plötzlich zwei Länder: Wo zahlst du eigentlich Steuern? Ich wusste es nicht.",
    "format": "R",
-   "date": "2026-11-21",
+   "date": "2026-12-21",
    "status": "idee",
    "source": null,
    "season": 1
@@ -176,7 +191,7 @@ window.PW_DATA = {
    "image": "Text-Karten",
    "voiceover": "Abmelden heißt nicht automatisch steuerfrei in Deutschland. Was wirklich zählt, hab ich gelernt …",
    "format": "R",
-   "date": "2026-11-23",
+   "date": "2026-12-23",
    "status": "idee",
    "source": null,
    "season": 1
@@ -188,7 +203,7 @@ window.PW_DATA = {
    "image": "Text-Karten DE ↔ TH",
    "voiceover": "Deutschland und Thailand haben ein Doppelbesteuerungsabkommen. Was das für uns bedeutet …",
    "format": "R",
-   "date": "2026-11-25",
+   "date": "2026-12-25",
    "status": "idee",
    "source": null,
    "season": 1
@@ -200,7 +215,7 @@ window.PW_DATA = {
    "image": "Real: Karten auf Tisch",
    "voiceover": "Welches Konto? Welche Kreditkarte? Welche Krankenversicherung für vier? Unsere Liste wurde lang.",
    "format": "R",
-   "date": "2026-11-27",
+   "date": "2026-12-27",
    "status": "idee",
    "source": null,
    "season": 1
@@ -212,7 +227,7 @@ window.PW_DATA = {
    "image": "Split: Wolfsburg vs. Ao Nang",
    "voiceover": "3-Zimmer-Wohnung: Wolfsburg gegen Ao Nang. Ich hab's durchgerechnet. Das Ergebnis hat mich überrascht.",
    "format": "R",
-   "date": "2026-11-29",
+   "date": "2026-12-29",
    "status": "idee",
    "source": null,
    "season": 1
@@ -224,7 +239,7 @@ window.PW_DATA = {
    "image": "Anime: Kinder stapeln Münzen",
    "voiceover": "Die Zahlen passen. Jetzt fehlt nur noch eins: Ich muss meinem Arbeitgeber Tschüss sagen.",
    "format": "M",
-   "date": "2026-12-01",
+   "date": "2026-12-31",
    "status": "idee",
    "source": null,
    "season": 1
@@ -236,7 +251,7 @@ window.PW_DATA = {
    "image": "Real: Werkstor von weitem, keine Logos",
    "voiceover": "Jahrelang bei einem der größten Autobauer der Welt. Sicherer geht's nicht. Und genau das war das Problem.",
    "format": "R",
-   "date": "2026-12-03",
+   "date": "2027-01-02",
    "status": "idee",
    "source": null,
    "season": 1
@@ -248,7 +263,7 @@ window.PW_DATA = {
    "image": "Real: Stift, Unterschrift (Dokument unscharf)",
    "voiceover": "Kein Streit, keine Kündigung. Ein Aufhebungsvertrag. Eine Unterschrift – und alles ist anders.",
    "format": "R",
-   "date": "2026-12-05",
+   "date": "2027-01-04",
    "status": "idee",
    "source": null,
    "season": 1
@@ -260,7 +275,7 @@ window.PW_DATA = {
    "image": "Anime: Kinder warten am Tor",
    "voiceover": "Letzter Arbeitstag. Draußen warten zwei, die gar nicht verstehen, warum Papa so grinst.",
    "format": "A",
-   "date": "2026-12-07",
+   "date": "2027-01-06",
    "status": "idee",
    "source": null,
    "season": 1
@@ -272,7 +287,7 @@ window.PW_DATA = {
    "image": "Real: volle Garage",
    "voiceover": "Ich dachte: Wohnung auflösen, ein Wochenende. Wir sind bei Woche drei.",
    "format": "R",
-   "date": "2026-12-09",
+   "date": "2027-01-08",
    "status": "idee",
    "source": null,
    "season": 1
@@ -284,7 +299,7 @@ window.PW_DATA = {
    "image": "Anime: Tochter hält Kuscheltier fest",
    "voiceover": "Regel: Jeder darf einen Koffer füllen. Die Kleine hat ihren schon gepackt. Nur Kuscheltiere.",
    "format": "M",
-   "date": "2026-12-11",
+   "date": "2027-01-10",
    "status": "idee",
    "source": null,
    "season": 1
@@ -296,7 +311,7 @@ window.PW_DATA = {
    "image": "Real: Handy, Nachrichten",
    "voiceover": "Ist das noch da? Letzter Preis? Kann ich in drei Wochen abholen? Kleinanzeigen ist ein eigenes Abenteuer.",
    "format": "R",
-   "date": "2026-12-13",
+   "date": "2027-01-12",
    "status": "idee",
    "source": null,
    "season": 1
@@ -308,7 +323,7 @@ window.PW_DATA = {
    "image": "Real: leerer Raum, Echo",
    "voiceover": "Leere Wohnung. Komisch, wie laut es plötzlich ist. Jetzt kommt der schwerste Teil.",
    "format": "R",
-   "date": "2026-12-15",
+   "date": "2027-01-14",
    "status": "idee",
    "source": null,
    "season": 1

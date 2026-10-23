@@ -72,17 +72,19 @@ Kapitel und Meilensteine aus Chris' Input: **Reisepässe → Visum → Steuer �
 | Visum | **17.01.2027** |
 | Abflug | **zwischen 15.02. und 15.03.2027** |
 
-**Regel: Die Serie überholt nie die Wirklichkeit.** Bei einer Folge alle 2 Tage ab ca. 01.11.2026 sind
-die 28 Folgen am ~25.12. aufgebraucht – Visum und Abflug kommen aber erst danach. Deshalb:
+**Start der Serie: 01.12.2026 (FEST 23.10.)** – bis dahin müssen Kanal und Puffer stehen (siehe `docs/FAHRPLAN.md`).
+
+**Regel: Die Serie überholt nie die Wirklichkeit.** Bei einer Folge alle 2 Tage ab 01.12.2026 sind
+die Folgen 1–10 und 12–24 am 14.01.2027 aufgebraucht – Visum und Abflug kommen erst danach. Deshalb:
 
 | Zeitraum | Folgen | Inhalt |
 |---|---|---|
-| Nov – Mitte Jan | 1–10, 12–24 | Entscheidung, Pässe (Rückblick), Steuer/Geld, Job, Ausmisten |
+| 01.12. – 14.01. | 1–10, 12–24 | Entscheidung, Pässe (Rückblick), Steuer/Geld, Job, Ausmisten |
 | Lücken füllen | Zwischenfolgen | Säule A/B-Folgen ohne Zeitbezug („Deutschland vs. Thailand: …“), Bildung |
 | ab 17.01.2027 | 11 | Visum ist da |
 | Feb – März 2027 | 25–28 | Abschied, Abflug, Staffelfinale |
 
-Bis zum Abflug braucht Staffel 1 damit eher **50–60 Folgen**. Die Zwischenfolgen schlägt der
+Vom 01.12. bis zum Abflug (~01.03.) sind das ca. **45 Posts** → zu den 28 Folgen kommen ca. **17 Zwischenfolgen**. Die Zwischenfolgen schlägt der
 Tages-Agent aus dem hochgeladenen Material vor (siehe `docs/AUTOMATION.md`).
 
 ### Kapitel 1 – Die Entscheidung (Folge 1–5)

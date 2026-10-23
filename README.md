@@ -1,3 +1,5 @@
+> **Übersicht & nächste Schritte:** [`docs/FAHRPLAN.md`](docs/FAHRPLAN.md) · Start der Serie: 01.12.2026
+
 # YouTube_Thailand_auswandern (Parallelwelten)
 
 Automatisierte Anime-Pipeline: echtes Rohmaterial (Handy/Brille) →
